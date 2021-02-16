@@ -311,8 +311,18 @@ const getPrettyStylesFromClassNames = (classNames, elements) => {
 
   let prettyStyles
 
+  const parsedStyles = css.parse(styles)
+
+  // ensure document level root custom properties are removed
+  parsedStyles.stylesheet.rules = parsedStyles.stylesheet.rules
+    .map((rule) => {
+      if (rule.selectors.includes(':root')) return null
+      return rule
+    })
+    .filter(Boolean)
+
   try {
-    prettyStyles = css.stringify(css.parse(styles))
+    prettyStyles = css.stringify(parsedStyles)
   } catch (e) {
     console.error(e)
     throw new Error(`There was an error parsing the following css: "${styles}"`)
