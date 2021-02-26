@@ -316,7 +316,7 @@ const getPrettyStylesFromClassNames = (classNames, elements) => {
   // ensure document level root custom properties are removed
   parsedStyles.stylesheet.rules = parsedStyles.stylesheet.rules
     .map((rule) => {
-      if (rule.selectors.includes(':root')) return null
+      if (rule.selectors?.includes(':root')) return null
       return rule
     })
     .filter(Boolean)
