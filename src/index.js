@@ -321,10 +321,11 @@ const getPrettyStylesFromClassNames = (classNames, elements) => {
         parsedStyles.stylesheet.rules.some((otherRule) =>
           otherRule.declarations?.some((declaration) => {
             if (
-              declaration.property === 'animation-name' ||
-              declaration.property === 'animation'
+              (declaration.property === 'animation-name' ||
+                declaration.property === 'animation') &&
+              declaration.value === rule.name
             ) {
-              if (declaration.value === rule.name) tempRule = rule
+              tempRule = rule
             }
           })
         )
