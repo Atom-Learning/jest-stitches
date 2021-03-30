@@ -316,7 +316,23 @@ const getPrettyStylesFromClassNames = (classNames, elements) => {
   // ensure document level root custom properties are removed
   parsedStyles.stylesheet.rules = parsedStyles.stylesheet.rules
     .map((rule) => {
-      if (rule.selectors?.includes(':root')) return null
+      if (rule.type === 'keyframes') {
+        let tempRule = null
+        parsedStyles.stylesheet.rules.some((otherRule) =>
+          otherRule.declarations?.some((declaration) => {
+            if (
+              declaration.property === 'animation-name' ||
+              declaration.property === 'animation'
+            ) {
+              if (declaration.value === rule.name) tempRule = rule
+            }
+          })
+        )
+        return tempRule
+      }
+      if (rule.selectors?.includes(':root')) {
+        return null
+      }
       return rule
     })
     .filter(Boolean)
